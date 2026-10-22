@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>認識多元的世界</title>
+<meta name="description" content="三段 3D 第一人稱體驗：走進三位國中生的一天，感受每個人接收世界的方式都不一樣，也想想環境和身邊的人可以怎麼調整。">
+<meta property="og:title" content="認識多元的世界">
+<meta property="og:description" content="三段 3D 第一人稱體驗：走進三位國中生的一天，感受每個人接收世界的方式都不一樣。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Iansui&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: hero with three overlapping "lenses" (one per day) → three day cards in a row → teacher notes in two columns. Each day owns one hue. */
+:root{
+  --bg:#eef3f6;
+  --surface:#ffffff;
+  --ink:#16222b;
+  --mute:#566672;
+  --line:rgba(22,34,43,.12);
+  --loud:#e07b39;
+  --focus:#1f9a8a;
+  --read:#6b5bd6;
+  --btn-ink:#ffffff;
+  --display:"Iansui","Kaiti TC","DFKai-SB","BiauKai",serif;
+  --body:"Noto Sans TC","Microsoft JhengHei","PingFang TC","Heiti TC",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f171c;--surface:#172229;--ink:#e6edf1;--mute:#9db0bc;--line:rgba(230,237,241,.14);--loud:#f0955a;--focus:#3fc0ae;--read:#9a8cf2;--btn-ink:#0f171c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f171c;--surface:#172229;--ink:#e6edf1;--mute:#9db0bc;--line:rgba(230,237,241,.14);--loud:#f0955a;--focus:#3fc0ae;--read:#9a8cf2;--btn-ink:#0f171c;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+
+header.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:32px;align-items:center;padding-block:64px 40px}
+.eyebrow{font-size:13px;letter-spacing:.18em;color:var(--mute);font-weight:700;margin:0}
+h1{font:400 clamp(48px,8.5vw,96px)/1.05 var(--display);margin:10px 0 18px;letter-spacing:.03em;text-wrap:balance}
+h1 .k{display:inline-block}
+h1 .k:nth-child(3){color:var(--loud)}h1 .k:nth-child(4){color:var(--read)}h1 .k:nth-child(6){color:var(--focus)}
+.lead{font-size:clamp(17px,2vw,19px);max-width:34em;margin:0;color:var(--ink)}
+.lead+.lead{margin-top:10px;color:var(--mute);font-size:16px}
+.lens{position:relative;aspect-ratio:1;max-width:380px;width:100%;justify-self:center}
+.lens i{position:absolute;width:62%;aspect-ratio:1;border-radius:50%;mix-blend-mode:multiply;opacity:.78;animation:float 9s ease-in-out infinite}
+.lens i:nth-child(1){background:var(--loud);left:4%;top:6%}
+.lens i:nth-child(2){background:var(--focus);right:4%;top:14%;animation-delay:-3s}
+.lens i:nth-child(3){background:var(--read);left:20%;bottom:2%;animation-delay:-6s}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .lens i{mix-blend-mode:screen;opacity:.6}}
+:root[data-theme="dark"] .lens i{mix-blend-mode:screen;opacity:.6}
+@keyframes float{50%{transform:translate(4%,-3%) scale(1.03)}}
+
+section{padding-block:28px}
+h2{font:700 clamp(22px,3vw,28px)/1.3 var(--body);margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--mute);margin:0 0 22px}
+.days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.day{--c:var(--loud);background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.day.focus{--c:var(--focus)}.day.read{--c:var(--read)}
+.tile{height:150px;position:relative;overflow:hidden;background:color-mix(in srgb,var(--c) 16%,var(--surface));display:grid;place-items:center}
+.tile canvas{position:absolute;inset:0;width:100%;height:100%}
+.tile .t{position:relative;font:400 30px var(--display);color:var(--c)}
+.day .body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.day h3{font:400 26px/1.25 var(--display);margin:0}
+.day p{margin:0;font-size:15px}
+.day .feel{color:var(--mute);font-size:14px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.chip{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--mute)}
+.go{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:var(--c);color:var(--btn-ink);text-decoration:none;font-weight:700;padding:10px 18px;border-radius:12px}
+.go:hover{filter:brightness(1.06)}
+
+.notes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.note{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.note h3{font-size:17px;margin:0 0 8px}
+.note ol,.note ul{margin:0;padding-left:1.2em}
+.note li+li{margin-top:4px}
+.principle{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;background:transparent;border:0;padding:0}
+.principle div{border-top:3px solid var(--c,var(--ink));padding-top:10px}
+.principle div:nth-child(1){--c:var(--loud)}.principle div:nth-child(2){--c:var(--focus)}.principle div:nth-child(3){--c:var(--read)}
+.principle b{display:block;font-size:16px;margin-bottom:2px}
+.principle span{color:var(--mute);font-size:14px}
+footer{padding-block:28px 48px;color:var(--mute);font-size:13px;border-top:1px solid var(--line);margin-top:24px}
+
+@media (max-width:860px){header.hero{grid-template-columns:1fr;padding-block:40px 16px}.lens{max-width:170px;justify-self:start}.days{grid-template-columns:1fr}.notes,.principle{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.lens i{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">3D 第一人稱體驗・國中版</p>
+      <h1><span class="k">認</span><span class="k">識</span><span class="k">多</span><span class="k">元</span><span class="k">的</span><span class="k">世</span><span class="k">界</span></h1>
+      <p class="lead">同一間教室、同一個早上，每個人接收到的世界都不一樣。有人覺得聲音太大，有人的注意力一直被拉走，有人看到的字會跳動。</p>
+      <p class="lead">走進三位國中生的一天，感受一下，再想想身邊的人和環境可以怎麼調整。</p>
+    </div>
+    <div class="lens" aria-hidden="true"><i></i><i></i><i></i></div>
+  </header>
+
+  <section aria-labelledby="daysTitle">
+    <h2 id="daysTitle">選一天走進去</h2>
+    <p class="sub">每段約 8 到 10 分鐘。建議戴耳機，玩完再一起討論。</p>
+    <div class="days">
+      <article class="day loud">
+        <div class="tile"><canvas data-fx="rings"></canvas><span class="t">嗡——</span></div>
+        <div class="body">
+          <h3>世界太大聲的一天</h3>
+          <p>轉學第一天，鐘聲、日光燈、擠滿人的走廊，一句玩笑話，對你來說都特別強烈。</p>
+          <p class="feel">你會感受到：聲音和光線一直累積、說話被照字面理解、計畫突然改變。</p>
+          <div class="meta"><span class="chip">約 10 分鐘</span><span class="chip">有大聲響與閃白畫面</span></div>
+          <a class="go" href="loud-day.html">走進校門 →</a>
+        </div>
+      </article>
+      <article class="day focus">
+        <div class="tile"><canvas data-fx="drift"></canvas><span class="t">咦，那是什麼？</span></div>
+        <div class="body">
+          <h3>分心的第一天</h3>
+          <p>你很想好好表現，可是大腦像同時開著十個頻道。窗外的鳥、隔壁的筆聲，都在拉走你的視線。</p>
+          <p class="feel">你會感受到：注意力被拉走、交代的事一下就忘、想停卻停不下來。</p>
+          <div class="meta"><span class="chip">約 8 分鐘</span><span class="chip">可切換支持模式</span></div>
+          <a class="go" href="focus-day.html">坐進教室 →</a>
+        </div>
+      </article>
+      <article class="day read">
+        <div class="tile"><canvas data-fx="jitter"></canvas><span class="t" id="jit">國文預習第一課</span></div>
+        <div class="body">
+          <h3>小安的開學日</h3>
+          <p>你很聰明，也很努力。可是黑板上的字會跳動，老師說的話只聽到一半，數字會翻面。</p>
+          <p class="feel">你會感受到：找班級、抄聯絡簿、數學小考、被點名念課文。</p>
+          <div class="meta"><span class="chip">約 8 分鐘</span><span class="chip">可開啟支持策略</span></div>
+          <a class="go" href="reading-day.html">走進走廊 →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="teachTitle">
+    <h2 id="teachTitle">給帶領的老師</h2>
+    <p class="sub">這些體驗不是要讓學生猜「誰是誰」，而是體會「如果是我，會需要什麼」。</p>
+    <div class="notes">
+      <div class="note principle">
+        <div><b>不貼標籤</b><span>不討論班上誰像遊戲裡的人。焦點放在感受和需要。</span></div>
+        <div><b>看見環境</b><span>同一個人換了環境就做得到。可以調整的是教室和我們的做法。</span></div>
+        <div><b>問本人</b><span>每個人都不一樣。想了解一個人，用對方舒服的方式問本人。</span></div>
+      </div>
+      <div class="note">
+        <h3>建議的一節課流程（45 分鐘）</h3>
+        <ol>
+          <li>開場 5 分鐘：「你有沒有覺得某種聲音、光線特別受不了？」</li>
+          <li>體驗 15 分鐘：每人選一天，或全班一起玩同一天。</li>
+          <li>小組 15 分鐘：分享最難受的時刻，和那時最希望別人怎麼做。</li>
+          <li>全班 10 分鐘：列出「我們班可以做的三件小事」。</li>
+        </ol>
+      </div>
+      <div class="note">
+        <h3>討論可以問</h3>
+        <ul>
+          <li>哪一個時刻讓你最不舒服？你那時在想什麼？</li>
+          <li>有支持和沒有支持，差在哪裡？哪一項改變最有用？</li>
+          <li>同學一句話、一個眼神，會讓那個時刻變好還是變糟？</li>
+          <li>你自己有沒有需要別人多等你一下的時候？</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    遊戲中的人物和情境都是虛構的，只模擬部分經驗，不能代表任何一個人，也不能用來判斷別人。電腦或平板用 Chrome、Edge 開啟效果最好；較舊的電腦可能會比較慢。
+  </footer>
+</div>
+<script>
+(()=>{
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const tiles=[...document.querySelectorAll('canvas[data-fx]')];
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  function size(c){const r=c.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);c.width=r.width*d;c.height=r.height*d;c.getContext('2d').setTransform(d,0,0,d,0,0);}
+  tiles.forEach(size);addEventListener('resize',()=>tiles.forEach(size));
+  const dots=Array.from({length:26},()=>({x:Math.random(),y:Math.random(),a:Math.random()*6.28,s:.2+Math.random()*.5}));
+  const W='國文預習第一課',CF={'國':'圖','文':'又','預':'頂','習':'羽','第':'弟','課':'果'};
+  const jit=document.getElementById('jit');
+  function draw(t){
+    tiles.forEach(c=>{
+      const g=c.getContext('2d'),w=c.clientWidth,h=c.clientHeight,fx=c.dataset.fx;g.clearRect(0,0,w,h);
+      if(fx==='rings'){g.strokeStyle=css('--loud');for(let i=0;i<5;i++){const r=((t/30+i*28)%140);g.globalAlpha=Math.max(0,1-r/140)*.6;g.lineWidth=2;g.beginPath();g.arc(w/2,h/2,r+8,0,7);g.stroke();}}
+      if(fx==='drift'){g.fillStyle=css('--focus');dots.forEach(d=>{d.a+=.01;const x=(d.x*w+Math.cos(d.a+t/900)*30*d.s)%w,y=(d.y*h+Math.sin(d.a*1.3+t/700)*20*d.s)%h;g.globalAlpha=.25+.35*d.s;g.beginPath();g.arc(x,y,2+4*d.s,0,7);g.fill();});}
+      g.globalAlpha=1;
+    });
+    if(jit&&Math.floor(t/420)!==draw.k){draw.k=Math.floor(t/420);
+      jit.innerHTML=[...W].map(ch=>{const m=Math.random()<.22&&CF[ch]?CF[ch]:ch;return `<span style="display:inline-block;transform:translate(${(Math.random()-.5)*4}px,${(Math.random()-.5)*5}px) rotate(${(Math.random()-.5)*12}deg)">${m}</span>`;}).join('');}
+    if(!reduce)requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
