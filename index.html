@@ -127,7 +127,7 @@ a{color:inherit}
 .pact span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--c,var(--ink));margin-right:7px;vertical-align:2px}
 .pact span:nth-of-type(1){--c:var(--loud)}.pact span:nth-of-type(2){--c:var(--focus)}.pact span:nth-of-type(3){--c:var(--read)}
 .pact button{border:0;background:none;color:var(--dim);text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1100px}
+.cards{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1100px}
 .card{--c:var(--loud);position:relative;display:flex;flex-direction:column;background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--faint);border-top:4px solid var(--c);border-radius:4px 4px 14px 14px;overflow:hidden;transition:background .2s,color .2s,transform .2s,box-shadow .2s}
 .card.focus{--c:var(--focus)}.card.read{--c:var(--read)}
 .card.sel{background:var(--hi);color:var(--hi-ink);transform:translateY(-6px);box-shadow:0 22px 40px -22px rgba(0,0,0,.8)}
@@ -218,31 +218,92 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
 .dlg p{margin:14px 0 0;font-size:14px;color:var(--dim)}
 .dlg .row{display:flex;justify-content:flex-end;margin-top:16px}
 
-@media (max-width:900px){
-  .cards{grid-template-columns:1fr;gap:10px}
-  .card.sel{transform:none}
-  .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .vows{grid-template-columns:1fr}
+/* ===== responsive =====
+   The early script in <body> sets three attributes on #game:
+   data-layout="stack" (phones, portrait tablets: scene on top, UI below), data-short (landscape phones / low screens),
+   data-cards="carousel" (stage cards become a swipeable row). Width-only tweaks stay as media queries. */
+@media (min-width:1600px){.cards{max-width:1320px}.left{width:500px}.mlist{width:340px}.mi .zh{font-size:19px}.card p{font-size:15px}}
+@media (max-width:1100px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.pill .opt{display:none}.pill i{margin-right:24px}}
+
+/* stack */
+#game[data-layout="stack"][data-screen="menu"] .shade{background:linear-gradient(0deg,var(--shade) 0,rgba(12,16,22,.72) 44%,rgba(12,16,22,.1) 70%,transparent 85%)}
+#game[data-layout="stack"][data-screen="levels"] .shade{background:linear-gradient(0deg,var(--shade) 0,rgba(12,16,22,.72) 50%,rgba(12,16,22,.2) 75%,rgba(12,16,22,.3) 100%)}
+#game[data-layout="stack"][data-screen="warm"] .shade,#game[data-layout="stack"][data-screen="teach"] .shade{background:linear-gradient(0deg,var(--shade) 0,rgba(12,16,22,.8) 55%,rgba(12,16,22,.45) 100%)}
+[data-layout="stack"] .left{top:auto;bottom:max(16px,2.5vh);transform:none;width:auto;right:max(16px,env(safe-area-inset-right,0px));left:max(16px,env(safe-area-inset-left,0px))}
+[data-layout="stack"] .stamp{width:min(64px,14vw);font-size:min(36px,7.6vw)}
+[data-layout="stack"] .word h1{font-size:min(64px,12.5vw)}
+[data-layout="stack"] .mlist{margin-top:18px;width:100%;max-width:440px}
+[data-layout="stack"] .mi{padding:10px 12px}
+[data-layout="stack"] .place,[data-layout="stack"] .crumb{display:none}
+[data-layout="stack"] .scr{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+[data-layout="stack"] .ttl h2{font-size:clamp(28px,8vw,44px)}
+[data-layout="stack"] .lv-top{gap:10px 14px}
+[data-layout="stack"] .prog{margin-left:0}
+[data-layout="stack"] .panel,[data-layout="stack"] .tpanel{max-width:none;padding:16px}
+[data-layout="stack"] .modes{grid-template-columns:repeat(2,minmax(0,1fr))}
+[data-layout="stack"] .flow,[data-layout="stack"] .vows{grid-template-columns:1fr}
+[data-layout="stack"] .tag{font-size:12px;padding:5px 9px}
+#game[data-layout="stack"][data-screen="levels"] .tag:not(.sel),#game[data-short][data-screen="levels"] .tag:not(.sel){opacity:0!important}
+@media (max-width:420px){[data-layout="stack"] .ttl small{display:none}}
+@media (max-height:680px) and (orientation:portrait){[data-layout="stack"] .mi .en{display:none}[data-layout="stack"] .mi{padding:9px 12px}[data-layout="stack"] .mlist{margin-top:12px}[data-layout="stack"] .sub-row{margin-top:6px}}
+@media (min-width:600px){
+  [data-layout="stack"] .panel,[data-layout="stack"] .tpanel{padding:22px 24px}
+  [data-layout="stack"] .modes{grid-template-columns:repeat(4,minmax(0,1fr))}
+  [data-layout="stack"] .vows{grid-template-columns:repeat(3,minmax(0,1fr))}
+  [data-layout="stack"] .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media (max-width:760px){
-  #game[data-screen="menu"] .shade{background:linear-gradient(0deg,var(--shade) 0,rgba(12,16,22,.7) 42%,rgba(12,16,22,.1) 70%,transparent 85%)}
-  #game[data-screen="warm"] .shade,#game[data-screen="teach"] .shade{background:linear-gradient(0deg,var(--shade) 0,rgba(12,16,22,.78) 55%,rgba(12,16,22,.35) 100%)}
-  .left{top:auto;bottom:16px;transform:none}
-  .mlist{margin-top:18px}
-  .mi{padding:7px 12px}
-  .place,.crumb{display:none}
-  .prog{margin-left:0}
-  .modes{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .flow{grid-template-columns:1fr}
-  .scr{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-  .keyhint{display:none}
-}
-@media (max-height:600px) and (min-width:761px){.mlist{margin-top:14px}.mi{padding:5px 12px}.stamp{width:52px}.strip{height:44px}}
-@media (prefers-reduced-motion:reduce){.scr{animation:none}.board[data-mode="loud"] .line,.board[data-mode="loud"]::before{animation:none}.card,.card.sel{transition:none;transform:none}}
+
+/* short */
+#game[data-short]{--top:calc(46px + env(safe-area-inset-top,0px));--bot:calc(34px + env(safe-area-inset-bottom,0px))}
+[data-short] .pill,[data-short] .tbtn{padding:4px 10px;font-size:12px}
+[data-short] .botbar{font-size:12px}
+[data-short] .stamp{width:46px;font-size:24px;padding:4px 0;outline-offset:-7px;border-width:2px}
+[data-short] .word h1{font-size:clamp(34px,5.6vw,52px)}
+[data-short] .sub-row{margin-top:6px}
+[data-short] .sub-row b{font-size:12px;padding:2px 10px}
+[data-short] .mlist{margin-top:12px;gap:2px}
+[data-short] .mi{padding:6px 12px}
+[data-short] .mi .en{display:none}
+[data-short] .mi .zh{font-size:15px}
+[data-short] .ttl h2{font-size:28px}
+[data-short] .ttl small,[data-short] .pact,[data-short] .route,[data-short] .card p,[data-short] .strip{display:none}
+[data-short] #scr-levels{gap:8px;padding-block:4px 10px}
+[data-short] .back{padding:5px 12px 5px 8px}
+[data-short] .back .en{display:none}
+[data-short] .cbody{padding:10px 14px 12px;gap:6px}
+[data-short] .card h3{font-size:22px}
+[data-short] .enter{padding:7px 12px}
+[data-short] .panel,[data-short] .tpanel{margin-top:10px;padding:14px 16px}
+[data-short] .board{min-height:104px;padding:12px 16px}
+[data-short] .line{font-size:20px}
+[data-short] .cap{min-height:0;margin-top:8px}
+[data-short] .tag{font-size:12px;padding:5px 9px}
+
+/* carousel */
+.dots{display:none}
+[data-cards="carousel"] #scr-levels{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+[data-cards="carousel"] .cards{--cw:min(80vw,340px);display:flex;gap:12px;max-width:none;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));padding:8px calc((100vw - var(--cw)) / 2) 4px}
+[data-short][data-cards="carousel"] .cards{--cw:min(46vw,320px)}
+[data-cards="carousel"] .cards::-webkit-scrollbar{display:none}
+[data-cards="carousel"] .card{flex:0 0 var(--cw);scroll-snap-align:center;scroll-snap-stop:always}
+[data-cards="carousel"] .card:not(.sel){opacity:.7;transform:scale(.94)}
+[data-cards="carousel"] .card.sel{transform:none}
+[data-cards="carousel"] .dots{display:flex;justify-content:center;gap:4px}
+.dots button{position:relative;width:28px;height:20px;border:0;padding:0;background:none;cursor:pointer}
+.dots button::before{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:4px;background:var(--faint);transform:translate(-50%,-50%);transition:width .25s,background .25s}
+.dots button.on::before{width:22px;background:var(--hi)}
+
+@media (prefers-reduced-motion:reduce){.scr{animation:none}.board[data-mode="loud"] .line,.board[data-mode="loud"]::before{animation:none}.card,.card.sel,[data-cards="carousel"] .card:not(.sel){transition:none;transform:none}}
 </style>
 </head>
 <body>
 <div id="game" data-screen="menu">
+<script>
+/* 先決定版型，避免第一個畫面閃一下 */
+(function(){var g=document.getElementById('game');window.__layout=function(){var W=innerWidth,H=innerHeight,stack=W<=760||H>W*1.08,short=!stack&&H<=520;g.dataset.layout=stack?'stack':'wide';if(short)g.setAttribute('data-short','');else g.removeAttribute('data-short');g.dataset.cards=(stack||short||W<=900)?'carousel':'grid';};window.__layout();addEventListener('resize',window.__layout);})();
+</script>
   <canvas id="bg" role="img" aria-label="一間灑滿晨光的教室，三位同學坐在座位上：一位身邊有一圈圈聲波，一位身邊飄著小光點，一位桌上的字在跳動。"></canvas>
   <div class="shade"></div>
   <span class="tag loud" data-k="loud">太大聲</span>
@@ -250,7 +311,7 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
   <span class="tag read" data-k="read">字會跳</span>
 
   <div class="topbar">
-    <span class="pill"><i aria-hidden="true"></i>3D 第一人稱體驗・國中版</span>
+    <span class="pill"><i aria-hidden="true"></i>3D 第一人稱體驗<span class="opt">・國中版</span></span>
     <span class="crumb" id="crumb"></span>
     <button class="tbtn" type="button" id="fsBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>全螢幕</span></button>
   </div>
@@ -329,6 +390,7 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
         </div>
       </article>
     </div>
+    <div class="dots" id="dots" role="group" aria-label="切換關卡"><button type="button" aria-label="第一關" class="on"></button><button type="button" aria-label="第二關"></button><button type="button" aria-label="第三關"></button></div>
   </section>
 
   <!-- ============ 暖身 ============ -->
@@ -424,7 +486,8 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
     if(!window.THREE)return null;
     let r;
     try{r=new THREE.WebGLRenderer({canvas:cv,antialias:true});}catch(e){return null;}
-    r.setPixelRatio(Math.min(devicePixelRatio||1,2));
+    const small=Math.min(innerWidth,innerHeight)<=600;
+    r.setPixelRatio(Math.min(devicePixelRatio||1,small?1.5:2));
     r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;
     const scene=new THREE.Scene();
     const skyC=document.createElement('canvas');skyC.width=4;skyC.height=256;{const g=skyC.getContext('2d');const gr=g.createLinearGradient(0,0,0,256);gr.addColorStop(0,'#3c5a86');gr.addColorStop(.55,'#9fb6cf');gr.addColorStop(1,'#f3c79d');g.fillStyle=gr;g.fillRect(0,0,4,256);}
@@ -507,7 +570,7 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
     // 光線與微塵
     scene.add(new THREE.HemisphereLight('#fff2e2','#8c7a66',.55));
     const sun=new THREE.DirectionalLight('#ffd8a8',1.3);sun.position.set(-9,6.5,2.5);sun.target.position.set(0,0,0);sun.castShadow=true;
-    sun.shadow.mapSize.set(2048,2048);sun.shadow.bias=-.0005;sun.shadow.normalBias=.02;Object.assign(sun.shadow.camera,{left:-14,right:14,top:14,bottom:-14,near:1,far:40});
+    sun.shadow.mapSize.set(small?1024:2048,small?1024:2048);sun.shadow.bias=-.0005;sun.shadow.normalBias=.02;Object.assign(sun.shadow.camera,{left:-14,right:14,top:14,bottom:-14,near:1,far:40});
     scene.add(sun);scene.add(sun.target);
     const DN=260,dp=new Float32Array(DN*3);for(let i=0;i<DN;i++){dp[i*3]=rnd(-4,4);dp[i*3+1]=rnd(.3,3);dp[i*3+2]=rnd(-3,3);}
     const dg=new THREE.BufferGeometry();dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
@@ -520,20 +583,20 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
       warm:{pos:[1.2,3.0,3.4],look:[1.0,1.7,-3.1],ox:-.24,oy:0},
       teach:{pos:[-1.6,4.6,8.4],look:[.4,1,-1.2],ox:-.24,oy:0}
     };
-    const NARROW_OY={menu:.2,levels:.3,warm:.32,teach:.32};
+    const NARROW_OY={menu:.25,levels:.3,warm:.32,teach:.32};const leftEl=document.querySelector('.left');
     const cur={pos:new THREE.Vector3(...VIEWS.menu.pos),look:new THREE.Vector3(...VIEWS.menu.look),ox:VIEWS.menu.ox,oy:0};
     const tgt={pos:new THREE.Vector3(),look:new THREE.Vector3(),ox:0,oy:0};
-    let view='menu',focusK=null,W=1,H=1,narrow=false;
+    let view='menu',focusK=null,W=1,H=1,narrow=false,short=false,carousel=false;
     function setTarget(){
       const vw=VIEWS[view];tgt.pos.set(...vw.pos);tgt.look.set(...vw.look);tgt.ox=narrow?0:vw.ox;tgt.oy=narrow?NARROW_OY[view]:vw.oy;
-      if(view==='levels'&&focusK){const h=S[focusK].head;tgt.look.copy(h);tgt.look.y-=.25;tgt.pos.copy(h).add(new THREE.Vector3(3.8,3.2,5.8));if(!narrow){tgt.ox={loud:.27,focus:0,read:-.27}[focusK];}tgt.oy=.25;}
+      if(view==='levels'&&focusK){const h=S[focusK].head;tgt.look.copy(h);tgt.look.y-=.25;tgt.pos.copy(h).add(new THREE.Vector3(3.8,3.2,5.8));if(!carousel)tgt.ox={loud:.27,focus:0,read:-.27}[focusK];tgt.oy=carousel?(short?.33:narrow?.16:.3):.25;}
       for(const k in S)S[k].light.intensity=(view==='levels'&&focusK&&focusK!==k)?.15:.55;
     }
     const tags=[...gameEl.querySelectorAll('.tag')];
     const v=new THREE.Vector3(),tmp=new THREE.Vector3();
     let mx=0,my=0,tmx=0,tmy=0;
     addEventListener('pointermove',e=>{tmx=e.clientX/innerWidth-.5;tmy=e.clientY/innerHeight-.5;});
-    function resize(){W=innerWidth;H=innerHeight;narrow=W<=760;r.setSize(W,H,false);cam.aspect=W/H;cam.fov=narrow?56:30;setTarget();}
+    function resize(){W=innerWidth;H=innerHeight;narrow=gameEl.dataset.layout==='stack';short=gameEl.hasAttribute('data-short');carousel=gameEl.dataset.cards==='carousel';r.setSize(W,H,false);cam.aspect=W/H;cam.fov=narrow?(W/H<.62?60:52):short?34:30;setTarget();}
     addEventListener('resize',resize);resize();
     let running=false,last=0,swapT=0,snap=true;
     function loop(now){
@@ -555,9 +618,10 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
         s.position.copy(u.base);s.position.x+=Math.sin(t*2.1+i)*.03;s.position.y+=Math.sin(t*1.6+i*1.7)*.05;s.material.rotation=Math.sin(t*3+i*2)*.18;});
       const a=dust.geometry.attributes.position.array;for(let i=0;i<a.length;i+=3){a[i+1]+=Math.sin(t*.6+i)*.0012;a[i]+=Math.cos(t*.4+i*.7)*.0008;}dust.geometry.attributes.position.needsUpdate=true;
       r.render(scene,cam);
+      const limY=narrow&&view==='menu'?leftEl.getBoundingClientRect().top-12:H-60;
       tags.forEach(el=>{const kk=el.dataset.k;v.copy(S[kk].head);v.y+=kk==='read'?.75:.62;v.project(cam);
         const x=(v.x*.5+.5)*W,y=(-v.y*.5+.5)*H;el.style.transform=`translate(${x}px,${y}px) translate(-50%,-100%)`;
-        el.classList.toggle('on',v.z<1&&x>0&&x<W&&y>60&&y<H-60);el.classList.toggle('sel',view==='levels'&&focusK===kk);});
+        el.classList.toggle('on',v.z<1&&x>0&&x<W&&y>60&&y<limY);el.classList.toggle('sel',view==='levels'&&focusK===kk);});
     }
     return {
       start(){if(running)return;running=true;requestAnimationFrame(loop);},
@@ -579,8 +643,24 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
   /* ================= 選擇關卡 ================= */
   const cards=[...document.querySelectorAll('.card')];
   let sel=0;
-  function pickCard(i,{scroll=false}={}){sel=(i+cards.length)%cards.length;cards.forEach((c,j)=>c.classList.toggle('sel',j===sel));dio&&dio.focus(cards[sel].dataset.k);if(scroll)cards[sel].scrollIntoView({block:'nearest',behavior:reduce?'auto':'smooth'});}
-  cards.forEach((c,i)=>{c.addEventListener('mouseenter',()=>pickCard(i));c.addEventListener('focusin',()=>pickCard(i));});
+  const cardsEl=document.getElementById('cards'),dots=[...document.querySelectorAll('#dots button')];
+  const isCarousel=()=>gameEl.dataset.cards==='carousel';
+  function centerCard(i,smooth){const c=cards[i];cardsEl.scrollTo({left:c.offsetLeft-(cardsEl.clientWidth-c.offsetWidth)/2,behavior:smooth&&!reduce?'smooth':'auto'});}
+  function pickCard(i,{scroll=false}={}){
+    sel=(i+cards.length)%cards.length;
+    cards.forEach((c,j)=>c.classList.toggle('sel',j===sel));dots.forEach((d,j)=>d.classList.toggle('on',j===sel));
+    dio&&dio.focus(cards[sel].dataset.k);
+    if(scroll){if(isCarousel())centerCard(sel,true);else cards[sel].scrollIntoView({block:'nearest',behavior:reduce?'auto':'smooth'});}
+  }
+  cards.forEach((c,i)=>{c.addEventListener('mouseenter',()=>{if(!isCarousel())pickCard(i);});c.addEventListener('focusin',()=>pickCard(i,{scroll:isCarousel()}));});
+  dots.forEach((d,i)=>d.addEventListener('click',()=>pickCard(i,{scroll:true})));
+  // 輪播：滑到中間的那張就是選中的關卡
+  let snapT=0;
+  cardsEl.addEventListener('scroll',()=>{if(!isCarousel())return;clearTimeout(snapT);snapT=setTimeout(()=>{
+    const mid=cardsEl.getBoundingClientRect().left+cardsEl.clientWidth/2;let best=sel,bd=1e9;
+    cards.forEach((c,i)=>{const b=c.getBoundingClientRect(),d=Math.abs(b.left+b.width/2-mid);if(d<bd){bd=d;best=i;}});
+    if(best!==sel)pickCard(best);},60);},{passive:true});
+  addEventListener('resize',()=>{if(current==='levels'&&isCarousel())centerCard(sel,false);});
 
   /* ================= 小提示 ================= */
   const TIPS={
@@ -589,6 +669,7 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
     warm:['換不同的接收方式，同一句話會變成什麼樣子？','老師說慢一點、寫在黑板上，會不會比較容易？'],
     teach:['建議先玩暖身，再進入關卡，最後留時間討論。','重點放在「我們可以怎麼調整」，不是「誰像誰」。']
   };
+  if(matchMedia('(hover:none)').matches){TIPS.menu[3]='點一下選單項目就能進入。';TIPS.levels[0]='左右滑動選擇關卡，點一下卡片進入。';}
   const tipEl=document.getElementById('tip');let tipList=TIPS.menu,ti=0;
   if(!reduce)setInterval(()=>{if(document.hidden||tipList.length<2)return;tipEl.style.opacity=0;setTimeout(()=>{ti=(ti+1)%tipList.length;tipEl.innerHTML=tipList[ti];tipEl.style.opacity=1;},400);},6000);
 
@@ -606,7 +687,7 @@ dialog::backdrop{background:rgba(8,12,16,.55);backdrop-filter:blur(3px)}
     crumbEl.innerHTML=CRUMB[name];
     tipList=TIPS[name];ti=0;tipEl.innerHTML=tipList[0];
     if(dio){dio.setView(name);if(name==='levels')dio.focus(cards[sel].dataset.k);}
-    if(name==='levels')tiles.forEach(size);
+    if(name==='levels'){tiles.forEach(size);if(isCarousel())centerCard(sel,false);}
     const sc=document.getElementById(SCR[name]);sc.scrollTop=0;
     if(focus){const f=name==='menu'?items[curItem]:sc.querySelector('h2');f&&f.focus({preventScroll:true});}
   }
